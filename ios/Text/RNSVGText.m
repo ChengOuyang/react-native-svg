@@ -26,12 +26,17 @@
 
     CGPathRef path = [self getGroupPath:context];
     [self renderGroupTo:context rect:rect];
-    [self releaseCachedPath];
+//    [self releaseCachedPath];
     CGContextRestoreGState(context);
 
     CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &CGAffineTransformIdentity);
     [self setHitArea:transformedPath];
     CGPathRelease(transformedPath);
+}
+
+- (void)dealloc
+{
+    [self releaseCachedPath];
 }
 
 - (void)setupGlyphContext:(CGContextRef)context
@@ -63,7 +68,7 @@
 {
     [self setupGlyphContext:context];
     CGPathRef groupPath = [self getGroupPath:context];
-    [self releaseCachedPath];
+//    [self releaseCachedPath];
 
     return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(groupPath, &CGAffineTransformIdentity));
 }

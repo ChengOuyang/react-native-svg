@@ -124,7 +124,7 @@ class TextShadowNode extends GroupShadowNode {
             clip(canvas, paint);
             getGroupPath(canvas, paint);
             drawGroup(canvas, paint, opacity);
-            releaseCachedPath();
+            // releaseCachedPath();
         }
     }
 
@@ -132,7 +132,7 @@ class TextShadowNode extends GroupShadowNode {
     protected Path getPath(Canvas canvas, Paint paint) {
         setupGlyphContext(canvas);
         Path groupPath = getGroupPath(canvas, paint);
-        releaseCachedPath();
+        // releaseCachedPath();
         return groupPath;
     }
 
@@ -197,5 +197,11 @@ class TextShadowNode extends GroupShadowNode {
     void pushGlyphContext() {
         boolean isTextNode = !(this instanceof TextPathShadowNode) && !(this instanceof TSpanShadowNode);
         getTextRootGlyphContext().pushContext(isTextNode, this, mFont, mPositionX, mPositionY, mDeltaX, mDeltaY, mRotate);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        releaseCachedPath();
     }
 }
